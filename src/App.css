@@ -1,0 +1,38 @@
+#components-layout-demo-side .logo {
+  height: 32px;
+  margin: 16px;
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.site-layout .site-layout-background {
+  background: #fff;
+  padding: 10px 10px;
+  line-height: 50%;
+}
+
+.custom-header-layout-sider-trigger {
+  position: fixed;
+  bottom: 0;
+  z-index: 1;
+  height: 48px;
+  color: #fff;
+  line-height: 48px;
+  text-align: center;
+  background: #002140;
+  cursor: pointer;
+  -webkit-transition: all 0.2s;
+  transition: all 0.2s;
+}
+
+.wkllogs {
+  white-space: pre-wrap;
+}
+
+.ant-statistic-content-suffix {
+  font-size: 16px;
+}
+
+span.ant-descriptions-item-label {
+  font-weight: 100;
+  color: #aaa;
+}
