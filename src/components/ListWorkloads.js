@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { observer, inject } from "mobx-react";
 import {
   Space,
@@ -162,11 +162,10 @@ class ListWorkloads extends React.Component {
   }
 
   statusIcon(status) {
-    let statusButton;
-    if (status == "Succeeded") {
+    if (status === "Succeeded") {
       return <CheckCircleOutlined style={{ fontSize: "16px", color: "green" }} />;
     } else {
-      if (status == "Active") {
+      if (status === "Active") {
         return <SyncOutlined spin style={{ fontSize: "16px", color: "gray" }} />;
       } else {
         return <ExclamationCircleOutlined style={{ fontSize: "16px", color: "red" }} />;

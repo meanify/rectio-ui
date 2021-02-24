@@ -3,9 +3,11 @@ import React from "react";
 import { Drawer } from "antd";
 
 class RectioDrawer extends React.Component {
+  /*
   constructor(props) {
     super(props);
   }
+  */
 
   render() {
     return (

@@ -15,11 +15,11 @@ import {
   PlusOutlined,
 } from "@ant-design/icons";
 
-import { Link, Route, Switch } from "react-router-dom";
+import { Link, Route } from "react-router-dom";
 
 import { Space, Layout, Menu, notification, Badge, Popover, Button} from "antd";
 
-const { Header, Content, Footer, Sider } = Layout;
+const { Header, Content, Sider } = Layout;
 const { SubMenu } = Menu;
 
 class App extends React.Component {
