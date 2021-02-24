@@ -1,8 +1,5 @@
 import React from "react";
 
-import SyntaxHighlighter from "react-syntax-highlighter";
-import { a11yLight } from "react-syntax-highlighter/dist/esm/styles/hljs";
-
 import { Drawer } from "antd";
 
 class RectioDrawer extends React.Component {

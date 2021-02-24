@@ -10,15 +10,8 @@ import {
   Collapse,
   Statistic,
   Drawer,
-  Form,
-  Input,
   Badge,
-  Radio,
-  Select,
   Descriptions,
-  DatePicker,
-  InputNumber,
-  Switch,
   Timeline,
   Divider,
 } from "antd";
@@ -28,16 +21,13 @@ import { BiMemoryCard } from "react-icons/bi";
 
 import {
   CheckCircleOutlined,
-  SlidersOutlined,
   ExportOutlined,
   HistoryOutlined,
   PauseCircleOutlined,
   UnorderedListOutlined,
   CodeOutlined,
-  PlusOutlined,
   SyncOutlined,
   ExclamationCircleOutlined,
-  ClockCircleOutlined,
   FieldTimeOutlined,
 } from "@ant-design/icons";
 
@@ -59,10 +49,6 @@ class ListWorkloads extends React.Component {
       },
     };
   }
-
-  componentDidMount() {}
-
-  refreshOnChange() {}
 
   showLogs(event, name, logs, extra) {
     event.stopPropagation();
@@ -150,48 +136,6 @@ class ListWorkloads extends React.Component {
     });
   }
 
-  showAddWorkload(event, title, language, width) {
-    event.stopPropagation();
-    this.setState({
-      drawerVisible: {
-        visible: true,
-        title: title,
-        content: (
-          <Form labelCol={{ span: 5 }} wrapperCol={{ span: 24 }} layout="horizontal">
-            <Form.Item label="Form Size" name="size">
-              <Radio.Group>
-                <Radio.Button value="small">Small</Radio.Button>
-                <Radio.Button value="default">Default</Radio.Button>
-                <Radio.Button value="large">Large</Radio.Button>
-              </Radio.Group>
-            </Form.Item>
-            <Form.Item label="Input">
-              <Input />
-            </Form.Item>
-            <Form.Item label="Select">
-              <Select>
-                <Select.Option value="demo">Demo</Select.Option>
-              </Select>
-            </Form.Item>
-            <Form.Item label="Date Picker">
-              <DatePicker />
-            </Form.Item>
-            <Form.Item label="Input Number">
-              <InputNumber />
-            </Form.Item>
-            <Form.Item label="Switch">
-              <Switch />
-            </Form.Item>
-            <Form.Item label="Button">
-              <Button>Button</Button>
-            </Form.Item>
-          </Form>
-        ),
-        width: width,
-      },
-    });
-  }
-
   showDrawerCancel(event) {
     event.stopPropagation();
     this.setState({
@@ -257,15 +201,7 @@ class ListWorkloads extends React.Component {
             <Col xs={12} sm={12} md={6} lg={3}>
               <Statistic title="Active Workloads" value={wkls.active} prefix={<Badge status="processing" size="large" />} />
             </Col>
-            <Col xs={12} sm={12} md={6} lg={3} align="right">
-              <Space>
-                <Button
-                  size="large"
-                  type="primary"
-                  shape="circle"
-                  icon={<PlusOutlined style={{ fontSize: "16px" }} />}
-                  onClick={(event) => this.showAddWorkload(event, "Creating a new data workload", "none", "40%")}></Button>
-              </Space>
+            <Col xs={12} sm={12} md={6} lg={3}>
             </Col>
           </Row>
         </Card>
@@ -333,7 +269,7 @@ class ListWorkloads extends React.Component {
                         icon={<HistoryOutlined size="small" />}
                         size="small"
                         disabled={Object.keys(value[1].details.history.status).length === 0 || Object.keys(value[1].details.history.statusHistory).length === 0}
-                        onClick={(event) => this.showHistory(event, value[0], value[1].details, "json", "50%")}>
+                        onClick={(event) => this.showHistory(event, value[0], value[1].details, "json", "40%")}>
                         History
                       </Button>
                       <Button
