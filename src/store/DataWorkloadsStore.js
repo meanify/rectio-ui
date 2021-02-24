@@ -11,7 +11,11 @@ class DataWorkloadsStore {
       dataWorkloads: observable,
       getWorkloads: action,
       countSuccedded: action, 
+      activeResources: computed,
       total: computed,
+      active: computed,
+      successed: computed,
+      failed: computed,
     });
   }
 
@@ -37,6 +41,10 @@ class DataWorkloadsStore {
   
   countSuccedded() {
     return this.dataWorkloads.size
+  }
+
+  get activeResources() {
+    return {cpu: 400, memory: 300}
   }
 
   get active() {

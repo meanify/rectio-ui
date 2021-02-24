@@ -1,20 +1,6 @@
 import React from "react";
 import { observer, inject } from "mobx-react";
-import {
-  Space,
-  Modal,
-  Card,
-  Row,
-  Col,
-  Button,
-  Collapse,
-  Statistic,
-  Drawer,
-  Badge,
-  Descriptions,
-  Timeline,
-  Divider,
-} from "antd";
+import { Space, Modal, Card, Row, Col, Button, Collapse, Statistic, Drawer, Badge, Descriptions, Timeline, Divider, Tag } from "antd";
 
 import { FiCpu } from "react-icons/fi";
 import { BiMemoryCard } from "react-icons/bi";
@@ -24,11 +10,11 @@ import {
   ExportOutlined,
   HistoryOutlined,
   PauseCircleOutlined,
-  UnorderedListOutlined,
   CodeOutlined,
   SyncOutlined,
   ExclamationCircleOutlined,
   FieldTimeOutlined,
+  TagOutlined,
 } from "@ant-design/icons";
 
 import * as moment from "moment";
@@ -192,16 +178,15 @@ class ListWorkloads extends React.Component {
               <Statistic title="Failed" valueStyle={{ color: "red" }} value={wkls.failed} suffix={"/" + wkls.total} prefix={<ExclamationCircleOutlined />} />
             </Col>
             <Col xs={12} sm={12} md={6} lg={3}>
-              <Statistic title="CPU utilization" value={wkls.failed} suffix="m" prefix={<FiCpu />} />
+              <Statistic title="CPU utilization" value={wkls.activeResources.cpu} suffix="m" prefix={<FiCpu />} />
             </Col>
             <Col xs={12} sm={12} md={6} lg={3}>
-              <Statistic title="Memory utilization" value={wkls.failed} suffix="Mi" prefix={<BiMemoryCard />} />
+              <Statistic title="Memory utilization" value={wkls.activeResources.memory} suffix="Mi" prefix={<BiMemoryCard />} />
             </Col>
             <Col xs={12} sm={12} md={6} lg={3}>
               <Statistic title="Active Workloads" value={wkls.active} prefix={<Badge status="processing" size="large" />} />
             </Col>
-            <Col xs={12} sm={12} md={6} lg={3}>
-            </Col>
+            <Col xs={12} sm={12} md={6} lg={3}></Col>
           </Row>
         </Card>
         <Collapse collapsible="header" defaultActiveKey={["1"]}>
@@ -221,6 +206,21 @@ class ListWorkloads extends React.Component {
                       <span> {value[1].status}</span>
                     </Space>
                   </Col>
+                  <Col span={6}>
+                    <Tag
+                      color={value[1].status === "Succeeded" ? "green" : value[1].status === "Failed" ? "red" : "default"}
+                      icon={<TagOutlined />}
+                      key="Urgent"
+                      checked={true}>
+                      {value[1].status}
+                    </Tag>
+                    <Tag color={"default"} icon={<TagOutlined />} key="Hop" checked={true}>
+                      Hop Engine
+                    </Tag>
+                    <Tag color={"default"} icon={<TagOutlined />} key="Finance" checked={true}>
+                      Finance
+                    </Tag>
+                  </Col>
                   <Col span={3}>
                     <Space>
                       <FieldTimeOutlined style={{ fontSize: "20px", color: "gray" }} />
@@ -232,49 +232,40 @@ class ListWorkloads extends React.Component {
                       </div>
                     </Space>
                   </Col>
-                  <Col span={6}></Col>
+
                   <Col span={6} align="right">
                     <Space>
                       <Button
                         align="end"
-                        type="default"
+                        type="round"
                         icon={<CodeOutlined size="small" />}
                         size="small"
                         disabled={!value[1].details}
-                        onClick={(event) => this.showSyntaxHighlighter(event, value[0], JSON.stringify(value[1].details, null, 2), "json", "50%")}>
+                        onClick={(event) => this.showSyntaxHighlighter(event, value[0], JSON.stringify(value[1].details, null, 2), "json", "40%")}>
                         Debug
                       </Button>
                       <Button
                         align="end"
-                        type="default"
+                        type="round"
                         icon={<ExportOutlined size="small" />}
                         size="small"
                         disabled={!value[1].details.logs}
-                        onClick={(event) => this.showSyntaxHighlighter(event, value[0], value[1].details.logs, "clean", "50%")}>
+                        onClick={(event) => this.showSyntaxHighlighter(event, value[0], value[1].details.logs, "clean", "40%")}>
                         Logs
                       </Button>
                       <Button
                         align="end"
-                        type="default"
-                        icon={<UnorderedListOutlined size="small" />}
-                        size="small"
-                        disabled={Object.keys(value[1].details.history.status).length === 0 || Object.keys(value[1].details.history.statusHistory).length === 0}
-                        onClick={(event) => this.showSyntaxHighlighter(event, value[0], JSON.stringify(value[1].details, null, 2), "json", "50%")}>
-                        Details
-                      </Button>
-                      <Button
-                        align="end"
-                        type="default"
+                        type="round"
                         icon={<HistoryOutlined size="small" />}
                         size="small"
                         disabled={Object.keys(value[1].details.history.status).length === 0 || Object.keys(value[1].details.history.statusHistory).length === 0}
-                        onClick={(event) => this.showHistory(event, value[0], value[1].details, "json", "40%")}>
+                        onClick={(event) => this.showHistory(event, value[0], value[1].details, "json", "35%")}>
                         History
                       </Button>
                       <Button
                         danger
                         align="end"
-                        type="default"
+                        type="round"
                         icon={<PauseCircleOutlined size="small" />}
                         size="small"
                         disabled={value[1].details.history.status.completionTime}
@@ -289,19 +280,9 @@ class ListWorkloads extends React.Component {
               <Descriptions size="small" column={{ xxl: 5, xl: 4, lg: 4, md: 3, sm: 2, xs: 1 }}>
                 <Descriptions.Item label="Name">{value[0]}</Descriptions.Item>
                 <Descriptions.Item label="Status">{value[1].status}</Descriptions.Item>
-                <Descriptions.Item label="Active Deadline (sec.)"> {value[1].worload.spec.activeDeadlineSeconds}</Descriptions.Item>
+                <Descriptions.Item label="Restart Policy">{value[1].worload.spec.restartPolicy}</Descriptions.Item>
                 <Descriptions.Item label="Retries">{value[1].worload.spec.backoffLimit}</Descriptions.Item>
                 <Descriptions.Item label="Active Deadline (sec.)">{value[1].worload.spec.activeDeadlineSeconds}</Descriptions.Item>
-                <Descriptions.Item label="Restart Policy">{value[1].worload.spec.restartPolicy}</Descriptions.Item>
-                <Descriptions.Item label="Data Pipeline" span={2}>
-                  {value[1].worload.spec.workload}
-                </Descriptions.Item>
-                <Descriptions.Item label="Parameters">{value[1].worload.spec.parameters}</Descriptions.Item>
-                <Descriptions.Item label="Properties">{value[1].worload.spec.systemproperties}</Descriptions.Item>
-                <Descriptions.Item label="Request (cpu)">{value[1].worload.spec.resources.requests.cpu}</Descriptions.Item>
-                <Descriptions.Item label="Request (memory)">{value[1].worload.spec.resources.requests.memory}</Descriptions.Item>
-                <Descriptions.Item label="Limits (cpu)">{value[1].worload.spec.resources.limits.cpu}</Descriptions.Item>
-                <Descriptions.Item label="Limits (memory)">{value[1].worload.spec.resources.limits.memory}</Descriptions.Item>
                 <Descriptions.Item label="Creation Date/Time">{moment(value[1].worload.metadata.creationTimestamp).format()}</Descriptions.Item>
                 <Descriptions.Item label="Completion Date/Time">
                   {value[1].details.history.status.completionTime ? moment(value[1].details.history.status.completionTime).format() : " Not available "}
@@ -314,6 +295,16 @@ class ListWorkloads extends React.Component {
                       ")"
                     : " Not available "}
                 </Descriptions.Item>
+                <Descriptions.Item label="Data Pipeline" span={2}>
+                  {value[1].worload.spec.workload}
+                </Descriptions.Item>
+                <Descriptions.Item label="Parameters">{value[1].worload.spec.parameters}</Descriptions.Item>
+                <Descriptions.Item label="Properties">{value[1].worload.spec.systemproperties}</Descriptions.Item>
+                <Descriptions.Item label="Request (cpu)">{value[1].worload.spec.resources.requests.cpu}</Descriptions.Item>
+                <Descriptions.Item label="Request (memory)">{value[1].worload.spec.resources.requests.memory}</Descriptions.Item>
+                <Descriptions.Item label="Limits (cpu)">{value[1].worload.spec.resources.limits.cpu}</Descriptions.Item>
+                <Descriptions.Item label="Limits (memory)">{value[1].worload.spec.resources.limits.memory}</Descriptions.Item>
+
                 <Descriptions.Item label="Replace">replace</Descriptions.Item>
               </Descriptions>
             </Collapse.Panel>
@@ -323,8 +314,7 @@ class ListWorkloads extends React.Component {
           title={this.state.drawerVisible.title}
           visible={this.state.drawerVisible.visible}
           width={this.state.drawerVisible.width}
-          onClose={(event) => this.showDrawerCancel(event)}
-          >
+          onClose={(event) => this.showDrawerCancel(event)}>
           {this.state.drawerVisible.content}
         </Drawer>
       </Space>
