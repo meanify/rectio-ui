@@ -655,7 +655,7 @@ class ListWorkloads extends React.Component {
           {this.state.drawerVisible.content}
         </Drawer>
         <BackTop />
-        <strong className="site-back-top-basic"> blue </strong>
+        <strong className="site-back-top-basic"> </strong>
       </Space>
     );
   }
