@@ -2,8 +2,6 @@ import React from "react";
 import { Empty, Card } from "antd";
 import { useParams, useRouteMatch } from "react-router-dom";
 
-import { Button, Form, Input, Radio, Select, InputNumber, DatePicker, Switch } from "antd";
-
 const Resources = () => {
   const { param } = useParams();
   const { url, path } = useRouteMatch();
@@ -37,39 +35,14 @@ const Team = () => {
   );
 };
 
-const AddWorkloadForm = () => {
-  return (
-    <Form labelCol={{ span: 5 }} wrapperCol={{ span: 24 }} layout="horizontal">
-      <Form.Item label="Form Size" name="size">
-        <Radio.Group>
-          <Radio.Button value="small">Small</Radio.Button>
-          <Radio.Button value="default">Default</Radio.Button>
-          <Radio.Button value="large">Large</Radio.Button>
-        </Radio.Group>
-      </Form.Item>
-      <Form.Item label="Input">
-        <Input />
-      </Form.Item>
-      <Form.Item label="Select">
-        <Select>
-          <Select.Option value="demo">Demo</Select.Option>
-        </Select>
-      </Form.Item>
-      <Form.Item label="Date Picker">
-        <DatePicker />
-      </Form.Item>
-      <Form.Item label="Input Number">
-        <InputNumber />
-      </Form.Item>
-      <Form.Item label="Switch">
-        <Switch />
-      </Form.Item>
-      <Form.Item label="Button">
-        <Button>Button</Button>
-      </Form.Item>
-    </Form>
-  );
-};
+class Utils {
+  readableBytes(bytes) {
+    var i = Math.floor(Math.log(bytes) / Math.log(1024)),
+    sizes = ['B', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB'];
+    return (bytes / Math.pow(1024, i)).toFixed(2) * 1 + ' ' + sizes[i];
+  }
+}
+
 
 export default Resources;
-export { Metrics, Team, AddWorkloadForm };
+export { Metrics, Team, Utils };

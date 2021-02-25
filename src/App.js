@@ -1,8 +1,8 @@
 import "./App.css";
 import ListWorkloads from "./components/ListWorkloads";
-import RectioDrawer from "./components/RectioDrawer";
+import RectioDrawer, {AddWorkloadForm} from "./components/RectioDrawer";
 import React from "react";
-import Resources, { Metrics, Team, AddWorkloadForm} from "./utils/Utils";
+import Resources, { Metrics, Team} from "./utils/Utils";
 import {
   RadarChartOutlined,
   UnorderedListOutlined,
@@ -23,7 +23,11 @@ const { Header, Content, Sider } = Layout;
 const { SubMenu } = Menu;
 
 class App extends React.Component {
+
+  addWorkload;
+
   constructor(props) {
+
     super(props);
     this.state = {
       collapsed: true,
@@ -34,8 +38,12 @@ class App extends React.Component {
         width: "50%",
       },
     };
+
     this.closeRectioDrawer = this.closeRectioDrawer.bind(this);
     this.openRectioDrawerAddWorkload = this.openRectioDrawerAddWorkload.bind(this);
+
+    this.addWorkload = new AddWorkloadForm()
+    this.addWorkload.initOptions(["Meanify", "Demo", "Rectio", "Apache Hop", "Finance"])
   }
 
   onCollapse = (collapsed) => {
@@ -69,17 +77,14 @@ class App extends React.Component {
   openRectioDrawerAddWorkload(event) {
     event.stopPropagation();
     var state = { ...this.state };
-    state.drawerVisible.title = "Title";
-    state.drawerVisible.content = ( AddWorkloadForm() );
-    state.drawerVisible.width = "30%";
+    state.drawerVisible.title = "Add a new data workload";
+    state.drawerVisible.content = ( this.addWorkload.addWorkloadDom() );
+    state.drawerVisible.width = "700px";
     state.drawerVisible.visible = true;
     this.setState({ state });
   }
 
-  showAddWorkload(event, title, content, width) {
-    event.stopPropagation();
-    RectioDrawer.showAddWorkload(event, title, content, width);
-  }
+
   render() {
     const { collapsed } = this.state;
     return (

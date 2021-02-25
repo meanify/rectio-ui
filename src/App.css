@@ -36,3 +36,7 @@ span.ant-descriptions-item-label {
   font-weight: 100;
   color: #aaa;
 }
+
+.site-back-top-basic {
+  color: rgba(64, 64, 64, 0.6);
+}
