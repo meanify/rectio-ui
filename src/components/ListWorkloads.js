@@ -592,7 +592,7 @@ class ListWorkloads extends React.Component {
                   ) : (
                     <Col span="24">
                       <Divider orientation="left">CPU consumption</Divider>
-                      <Empty />
+                      <Empty image={Empty.PRESENTED_IMAGE_SIMPLE}/>
                     </Col>
                   )}
                 </Col>
@@ -639,7 +639,7 @@ class ListWorkloads extends React.Component {
                   ) : (
                     <Col span="24">
                       <Divider orientation="left">Memory consumption</Divider>
-                      <Empty />
+                      <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
                     </Col>
                   )}
                 </Col>

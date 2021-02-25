@@ -8,7 +8,7 @@ const Resources = () => {
   console.log(url, path, param);
   return (
     <Card title="Resources" bordered={false}>
-      <Empty></Empty>
+      <Empty image={Empty.PRESENTED_IMAGE_SIMPLE}></Empty>
     </Card>
   );
 };
@@ -19,7 +19,7 @@ const Metrics = () => {
   console.log(url, path, param);
   return (
     <Card title="Products" bordered={false}>
-      <Empty></Empty>
+      <Empty image={Empty.PRESENTED_IMAGE_SIMPLE}></Empty>
     </Card>
   );
 };
@@ -29,8 +29,8 @@ const Team = () => {
   const { url, path } = useRouteMatch();
   console.log(url, path, team);
   return (
-    <Card title="Team" bordered={false}>
-      {team}
+    <Card title={"Team " + team } bordered={false}>
+      <Empty image={Empty.PRESENTED_IMAGE_SIMPLE}></Empty>
     </Card>
   );
 };
@@ -38,11 +38,10 @@ const Team = () => {
 class Utils {
   readableBytes(bytes) {
     var i = Math.floor(Math.log(bytes) / Math.log(1024)),
-    sizes = ['B', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB'];
-    return (bytes / Math.pow(1024, i)).toFixed(2) * 1 + ' ' + sizes[i];
+      sizes = ["B", "KiB", "MiB", "GiB", "TiB", "PiB", "EiB", "ZiB", "YiB"];
+    return (bytes / Math.pow(1024, i)).toFixed(2) * 1 + " " + sizes[i];
   }
 }
-
 
 export default Resources;
 export { Metrics, Team, Utils };
