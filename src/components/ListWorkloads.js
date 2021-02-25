@@ -1,6 +1,6 @@
 import React from "react";
 import { observer, inject } from "mobx-react";
-import { Space, Modal, Card, Row, Col, Button, Collapse, Statistic, Drawer, Badge, Descriptions, Timeline, Divider, Tag, BackTop } from "antd";
+import { Space, Modal, Card, Row, Col, Button, Collapse, Statistic, Drawer, Badge, Descriptions, Timeline, Divider, Tag, BackTop, Empty } from "antd";
 
 import Numbro from "numbro";
 
@@ -590,14 +590,17 @@ class ListWorkloads extends React.Component {
                       })}
                     </Row>
                   ) : (
-                    <></>
+                    <Col span="24">
+                      <Divider orientation="left">CPU consumption</Divider>
+                      <Empty />
+                    </Col>
                   )}
                 </Col>
                 <Col span={12}>
                   {value[1].details.metrics ? (
                     <Row>
                       <Col span="24">
-                        <Divider orientation="left">CPU consumption</Divider>
+                        <Divider orientation="left">Memory consumption</Divider>
                       </Col>
                       {[this.processMetricsStats(value[1].details, "memory")].map((memory) => {
                         return (
@@ -609,7 +612,7 @@ class ListWorkloads extends React.Component {
                                 value={Numbro(memory.min).format(this.numbroFormatByte).split(" ")[0]}
                                 suffix={Numbro(memory.min).format(this.numbroFormatByte).split(" ")[1]}
                                 prefix={<FiCpu />}
-                              />f
+                              />
                             </Col>
                             <Col span="8">
                               <Statistic
@@ -634,7 +637,10 @@ class ListWorkloads extends React.Component {
                       })}
                     </Row>
                   ) : (
-                    <></>
+                    <Col span="24">
+                      <Divider orientation="left">Memory consumption</Divider>
+                      <Empty />
+                    </Col>
                   )}
                 </Col>
               </Row>
