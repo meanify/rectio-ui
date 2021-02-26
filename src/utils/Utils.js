@@ -24,6 +24,17 @@ const Metrics = () => {
   );
 };
 
+const Settings = () => {
+  const { param } = useParams();
+  const { url, path } = useRouteMatch();
+  console.log(url, path, param);
+  return (
+    <Card title="Settings" bordered={false}>
+      <Empty image={Empty.PRESENTED_IMAGE_SIMPLE}></Empty>
+    </Card>
+  );
+};
+
 const Team = () => {
   const { team } = useParams();
   const { url, path } = useRouteMatch();
@@ -44,4 +55,4 @@ class Utils {
 }
 
 export default Resources;
-export { Metrics, Team, Utils };
+export { Metrics, Settings, Team, Utils };

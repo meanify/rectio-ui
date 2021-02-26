@@ -376,7 +376,7 @@ class ListWorkloads extends React.Component {
                         valueStyle={{ color: "gray" }}
                         value={Numbro(memory.min).format(this.numbroFormatByte).split(" ")[0]}
                         suffix={Numbro(memory.min).format(this.numbroFormatByte).split(" ")[1]}
-                        prefix={<FiCpu />}
+                        prefix={<BiMemoryCard />}
                       />
                     </Col>
                     <Col span="8">
@@ -385,7 +385,7 @@ class ListWorkloads extends React.Component {
                         valueStyle={{ color: "gray" }}
                         value={Numbro(memory.max).format(this.numbroFormatByte).split(" ")[0]}
                         suffix={Numbro(memory.max).format(this.numbroFormatByte).split(" ")[1]}
-                        prefix={<FiCpu />}
+                        prefix={<BiMemoryCard />}
                       />
                     </Col>
                     <Col span="8">
@@ -394,7 +394,7 @@ class ListWorkloads extends React.Component {
                         valueStyle={{ color: "gray" }}
                         value={Numbro(memory.avg).format(this.numbroFormatByte).split(" ")[0]}
                         suffix={Numbro(memory.avg).format(this.numbroFormatByte).split(" ")[1]}
-                        prefix={<FiCpu />}
+                        prefix={<BiMemoryCard />}
                       />
                     </Col>
                   </>
@@ -611,7 +611,7 @@ class ListWorkloads extends React.Component {
                                 valueStyle={{ color: "gray" }}
                                 value={Numbro(memory.min).format(this.numbroFormatByte).split(" ")[0]}
                                 suffix={Numbro(memory.min).format(this.numbroFormatByte).split(" ")[1]}
-                                prefix={<FiCpu />}
+                                prefix={<BiMemoryCard />}
                               />
                             </Col>
                             <Col span="8">
@@ -620,7 +620,7 @@ class ListWorkloads extends React.Component {
                                 valueStyle={{ color: "gray" }}
                                 value={Numbro(memory.max).format(this.numbroFormatByte).split(" ")[0]}
                                 suffix={Numbro(memory.max).format(this.numbroFormatByte).split(" ")[1]}
-                                prefix={<FiCpu />}
+                                prefix={<BiMemoryCard />}
                               />
                             </Col>
                             <Col span="8">
@@ -629,7 +629,7 @@ class ListWorkloads extends React.Component {
                                 valueStyle={{ color: "gray" }}
                                 value={Numbro(memory.avg).format(this.numbroFormatByte).split(" ")[0]}
                                 suffix={Numbro(memory.avg).format(this.numbroFormatByte).split(" ")[1]}
-                                prefix={<FiCpu />}
+                                prefix={<BiMemoryCard />}
                               />
                             </Col>
                           </>
