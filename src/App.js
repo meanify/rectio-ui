@@ -20,9 +20,11 @@ import {
   SettingOutlined,
 } from "@ant-design/icons";
 
+import logo from './assets/rectio-logo.svg';
+
 import { Link, Route } from "react-router-dom";
 
-import { Space, Layout, Menu, notification, Badge, Popover, Button, Divider, Descriptions } from "antd";
+import { Space, Layout, Menu, notification, Badge, Popover, Button, Divider, Image } from "antd";
 
 const { Header, Content, Sider } = Layout;
 const { SubMenu } = Menu;
@@ -163,11 +165,10 @@ class App extends React.Component {
           <Sider collapsible collapsed={collapsed} onCollapse={this.onCollapse}>
             <Content
               style={{
-                margin: "10px 10px",
-                textAlign: "center",
-                lineHeight: "28px",
+                marginTop: "5px",
+                textAlign: "center"
               }}>
-              <CloudSyncOutlined style={{ fontSize: "40px", color: "white" }} />
+              <Image width={"46px"} src={logo} alt="RECTIO - Data Workloads on Kubernetes made easy!" preview={false}/>
             </Content>
             <Menu theme="dark" defaultSelectedKeys={["1"]} mode="inline">
               <Menu.Item key="1" icon={<UnorderedListOutlined />}>

@@ -19,6 +19,7 @@ import {
   FieldTimeOutlined,
   TagOutlined,
   UnorderedListOutlined,
+  DollarOutlined,
 } from "@ant-design/icons";
 
 import * as moment from "moment";
@@ -549,7 +550,7 @@ class ListWorkloads extends React.Component {
               }
               key={value[0]}>
               <Row>
-                <Col span={12}>
+                <Col span={10}>
                   {value[1].details.metrics ? (
                     <Row>
                       <Col span="24">
@@ -592,11 +593,11 @@ class ListWorkloads extends React.Component {
                   ) : (
                     <Col span="24">
                       <Divider orientation="left">CPU consumption</Divider>
-                      <Empty image={Empty.PRESENTED_IMAGE_SIMPLE}/>
+                      <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
                     </Col>
                   )}
                 </Col>
-                <Col span={12}>
+                <Col span={10}>
                   {value[1].details.metrics ? (
                     <Row>
                       <Col span="24">
@@ -642,6 +643,10 @@ class ListWorkloads extends React.Component {
                       <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
                     </Col>
                   )}
+                </Col>
+                <Col span={4}>
+                  <Divider orientation="left">Cost(s)</Divider>
+                  <Statistic title="Cost(s)" valueStyle={{ color: "gray" }} value={"n.a."} suffix={"$"} prefix={<DollarOutlined />} />
                 </Col>
               </Row>
             </Collapse.Panel>
