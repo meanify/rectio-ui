@@ -11,7 +11,6 @@ import {
   TeamOutlined,
   BellOutlined,
   QuestionCircleOutlined,
-  CloudSyncOutlined,
   PlusOutlined,
   HomeOutlined,
   MailOutlined,
@@ -25,6 +24,8 @@ import logo from './assets/rectio-logo.svg';
 import { Link, Route } from "react-router-dom";
 
 import { Space, Layout, Menu, notification, Badge, Popover, Button, Divider, Image } from "antd";
+
+
 
 const { Header, Content, Sider } = Layout;
 const { SubMenu } = Menu;

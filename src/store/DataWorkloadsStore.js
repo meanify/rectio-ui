@@ -28,7 +28,7 @@ class DataWorkloadsStore {
   }
 
   getWorkloadMetrics(wklName) {
-    return mobx.toJS(this.dataWorkloads.get(wklName)).details.metrics  
+\    return mobx.toJS(this.dataWorkloads.get(wklName)).details.metrics  
   }
 
   upsertWorkloads(wklName, wklSpecs) {

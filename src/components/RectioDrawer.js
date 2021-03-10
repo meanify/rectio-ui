@@ -1,12 +1,18 @@
 import React from "react";
 
-import { Drawer, Button, Form, Input, Space, Slider, Collapse, Select } from "antd";
+import { Drawer, Button, Form, Input, Space, Slider, Collapse, Select, Radio, InputNumber } from "antd";
 import _ from "lodash";
 
 import { PlusOutlined, MinusCircleOutlined } from "@ant-design/icons";
 
+import axios from "axios";
+
 const { Option } = Select;
 const { Panel } = Collapse;
+
+const api = axios.create({
+  baseURL: "http://localhost:8000/api/v1/",
+});
 
 class AddWorkloadForm {
   children = [];
@@ -59,11 +65,11 @@ class AddWorkloadForm {
       resources: {
         requests: {
           cpu: "500m",
-          memory: "512Mi",
+          memory: "500Mi",
         },
         limits: {
           cpu: "500m",
-          memory: "512Mi",
+          memory: "500Mi",
         },
       },
       activeDeadlineSeconds: 3600,
@@ -87,10 +93,23 @@ class AddWorkloadForm {
     console.log("Default values:", initialValues);
     console.log("Received values of form:", values);
     console.log("Final request for server:", compiled);
+    api
+      .post("workload", compiled)
+      .then((response) => {
+        console.log(response);
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.log(error.response.data.message);
+      });
   }
 
   handleChange(value) {
     console.log(`selected ${value}`);
+  }
+
+  cpuFormatter(number) {
+    return number;
   }
 
   addWorkloadDom() {
@@ -121,9 +140,10 @@ class AddWorkloadForm {
               filterOption={(input, option) => option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0}>
               <Option value="/opt/hop/slimhop/artifacts/workload.hwf">Mainframe OffLoad</Option>
               <Option value="/opt/hop/slimhop/artifacts/workload.hwf">Migration Job</Option>
-              <Option value="/opt/hop/slimhop/artifacts/workload.hwf">Margin Recalculation</Option>F
+              <Option value="/opt/hop/slimhop/artifacts/workload.hwf">Margin Recalculation</Option>
               <Option value="/opt/hop/slimhop/artifacts/workload.hwf">Cost Reconciliation</Option>
               <Option value="/opt/hop/slimhop/artifacts/workload.hwf">Personal Data Validator</Option>
+              <Option value="/opt/hop/slimhop/artifacts/workload.hwf">Demo</Option>
             </Select>
           </Form.Item>
 
@@ -196,7 +216,7 @@ class AddWorkloadForm {
 
           {/* Advanced */}
           <Form.Item {...this.tailFormItemLayout}>
-            <Collapse  bordered={true}>
+            <Collapse bordered={true}>
               <Panel header="Advanced Option" key="1">
                 {/* logs */}
                 <Form.Item
@@ -216,49 +236,26 @@ class AddWorkloadForm {
                     <Option value="ROWLEVEL">Row Level</Option>
                   </Select>
                 </Form.Item>
-                {/* CPU Limits */}
                 <Form.Item name={["spec", "resources", "limits", "cpu"]} label="CPU Limits" {...this.formItemLayout}>
-                  <Slider
-                    step={0.1}
-                    min={0.1}
-                    max={8}
-                    marks={{
-                      0.1: "",
-                      0.25: "",
-                      0.5: "0.5m",
-                      1: "1m",
-                      1.5: "1.5m",
-                      2: "2m",
-                      3: "3m",
-                      4: "4m",
-                      5: "5m",
-                      6: "6m",
-                      7: "7m",
-                      8: "8m",
-                    }}
-                  />
+                  <Radio.Group defaultValue="a" size="small">
+                    <Radio.Button value="250m">250m</Radio.Button>
+                    <Radio.Button value="500m">500m</Radio.Button>
+                    <Radio.Button value="1">1CPU</Radio.Button>
+                    <Radio.Button value="2">2CPUs</Radio.Button>
+                    <Radio.Button value="4">4CPUs</Radio.Button>
+                    <Radio.Button value="8">8CPUs</Radio.Button>
+                  </Radio.Group>
                 </Form.Item>
                 {/* Memory Limits */}
                 <Form.Item name={["spec", "resources", "limits", "memory"]} label="Memory Limits" {...this.formItemLayout}>
-                  <Slider
-                    step={0.1}
-                    min={0.1}
-                    max={8}
-                    marks={{
-                      0.1: "",
-                      0.25: "",
-                      0.5: "0.5Mi",
-                      1: "1Mi",
-                      1.5: "1.5Mi",
-                      2: "2Mi",
-                      3: "3Mi",
-                      4: "4Mi",
-                      5: "5Mi",
-                      6: "6Mi",
-                      7: "7Mi",
-                      8: "8Mi",
-                    }}
-                  />
+                  <Radio.Group defaultValue="a" size="small">
+                    <Radio.Button value="250Mi">250Mi</Radio.Button>
+                    <Radio.Button value="500Mi">500Mi</Radio.Button>
+                    <Radio.Button value="1Gi">1Gi</Radio.Button>
+                    <Radio.Button value="2Gi">2Gi</Radio.Button>
+                    <Radio.Button value="4Gi">4Gi</Radio.Button>
+                    <Radio.Button value="8Gi">8Gi</Radio.Button>
+                  </Radio.Group>
                 </Form.Item>
               </Panel>
             </Collapse>
