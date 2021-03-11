@@ -1,18 +1,17 @@
 import React from "react";
 
-import { Drawer, Button, Form, Input, Space, Slider, Collapse, Select, Radio, InputNumber } from "antd";
+import { Drawer, Button, Form, Input, Space, Collapse, Select, Radio } from "antd";
 import _ from "lodash";
 
 import { PlusOutlined, MinusCircleOutlined } from "@ant-design/icons";
 
 import axios from "axios";
-
-const { Option } = Select;
-const { Panel } = Collapse;
-
 const api = axios.create({
   baseURL: "http://localhost:8000/api/v1/",
 });
+
+const { Option } = Select;
+const { Panel } = Collapse;
 
 class AddWorkloadForm {
   children = [];
@@ -97,10 +96,16 @@ class AddWorkloadForm {
       .post("workload", compiled)
       .then((response) => {
         console.log(response);
-        console.log(response.data);
+        const message = response?.data
+        if (message !== "undefined") {
+          console.log(message);
+        }
       })
       .catch((error) => {
-        console.log(error.response.data.message);
+        const message = error?.response?.data?.message
+        if (message !== "undefined") {
+          console.log(message);
+        }
       });
   }
 

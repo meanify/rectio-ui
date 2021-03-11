@@ -259,34 +259,34 @@ class ListWorkloads extends React.Component {
                 {title}
               </Descriptions.Item>
               <Descriptions.Item label="Data Pipeline" span={2}>
-                {content.worload.spec.workload}{" "}
+                {content.workload.spec.workload}{" "}
               </Descriptions.Item>
             </Descriptions>
             <Divider orientation="left">Status & Restartability</Divider>
             <Descriptions size="small" column={{ xxl: 2, xl: 2, lg: 1, md: 1, sm: 1, xs: 1 }}>
               <Descriptions.Item label="Status">{content.status}</Descriptions.Item>
-              <Descriptions.Item label="Restart Policy">{content.worload.spec.restartPolicy}</Descriptions.Item>
-              <Descriptions.Item label="Retries">{content.worload.spec.backoffLimit}</Descriptions.Item>
-              <Descriptions.Item label="Active Deadline (sec.)">{content.worload.spec.activeDeadlineSeconds}</Descriptions.Item>
+              <Descriptions.Item label="Restart Policy">{content.workload.spec.restartPolicy}</Descriptions.Item>
+              <Descriptions.Item label="Retries">{content.workload.spec.backoffLimit}</Descriptions.Item>
+              <Descriptions.Item label="Active Deadline (sec.)">{content.workload.spec.activeDeadlineSeconds}</Descriptions.Item>
             </Descriptions>
             <Divider orientation="left">Start Time & Duration</Divider>
             <Descriptions size="small" column={{ xxl: 2, xl: 2, lg: 1, md: 1, sm: 1, xs: 1 }}>
-              <Descriptions.Item label="Creation Date/Time">{moment(content.worload.metadata.creationTimestamp).format()}</Descriptions.Item>
+              <Descriptions.Item label="Creation Date/Time">{moment(content.workload.metadata.creationTimestamp).format()}</Descriptions.Item>
               <Descriptions.Item label="Completion Date/Time">
                 {content.details.history.status.completionTime ? moment(content.details.history.status.completionTime).format() : " Not available "}
               </Descriptions.Item>
               <Descriptions.Item label="Duration" span={2}>
                 {content.details.history.status.completionTime
-                  ? this.formatDuration(content.worload.metadata.creationTimestamp, content.details.history.status.completionTime, true) +
+                  ? this.formatDuration(content.workload.metadata.creationTimestamp, content.details.history.status.completionTime, true) +
                     " (" +
-                    this.formatDurationDetails(content.worload.metadata.creationTimestamp, content.details.history.status.completionTime, true) +
+                    this.formatDurationDetails(content.workload.metadata.creationTimestamp, content.details.history.status.completionTime, true) +
                     ")"
                   : " Not available "}
               </Descriptions.Item>
-              <Descriptions.Item label="Request (cpu)">{content.worload.spec.resources.requests.cpu}</Descriptions.Item>
-              <Descriptions.Item label="Request (memory)">{content.worload.spec.resources.requests.memory}</Descriptions.Item>
-              <Descriptions.Item label="Limits (cpu)">{content.worload.spec.resources.limits.cpu}</Descriptions.Item>
-              <Descriptions.Item label="Limits (memory)">{content.worload.spec.resources.limits.memory}</Descriptions.Item>
+              <Descriptions.Item label="Request (cpu)">{content.workload.spec.resources.requests.cpu}</Descriptions.Item>
+              <Descriptions.Item label="Request (memory)">{content.workload.spec.resources.requests.memory}</Descriptions.Item>
+              <Descriptions.Item label="Limits (cpu)">{content.workload.spec.resources.limits.cpu}</Descriptions.Item>
+              <Descriptions.Item label="Limits (memory)">{content.workload.spec.resources.limits.memory}</Descriptions.Item>
             </Descriptions>
           </>
         ),
@@ -441,13 +441,13 @@ class ListWorkloads extends React.Component {
             <Col xs={12} sm={12} md={6} lg={3}>
               <Statistic title="Failed" valueStyle={{ color: "red" }} value={wkls.failed} suffix={"/" + wkls.total} prefix={<ExclamationCircleOutlined />} />
             </Col>
-            <Col xs={12} sm={12} md={6} lg={3}>
-              <Statistic title="CPU utilization" value={wkls.activeResources.cpu} suffix="m" prefix={<FiCpu />} />
+            <Col xs={12} sm={12} md={6} lg={4}>
+              <Statistic title="CPU utilization" value={wkls.activeResources.cpu} suffix="core(s)" prefix={<FiCpu />} />
             </Col>
-            <Col xs={12} sm={12} md={6} lg={3}>
-              <Statistic title="Memory utilization" value={wkls.activeResources.memory} suffix="Mi" prefix={<BiMemoryCard />} />
+            <Col xs={12} sm={12} md={6} lg={4}>
+              <Statistic title="Memory utilization" value={wkls.activeResources.memory.split(" ")[0]} suffix={wkls.activeResources.memory.split(" ")[1]} prefix={<BiMemoryCard />} />
             </Col>
-            <Col xs={12} sm={12} md={6} lg={3}>
+            <Col xs={12} sm={12} md={6} lg={4}>
               <Statistic title="Active Workloads" value={wkls.active} prefix={<Badge status="processing" size="large" />} />
             </Col>
             <Col xs={12} sm={12} md={6} lg={3}></Col>
@@ -457,100 +457,106 @@ class ListWorkloads extends React.Component {
           {[...wkls.getWorkloads().entries()].map((value, index) => (
             <Collapse.Panel
               header={
-                <Row>
-                  <Col span={6}>
-                    <div>
-                      <b>{value[0]}</b> (click for details)
-                    </div>
-                    <div></div>
-                  </Col>
-                  <Col span={3}>
-                    <Space>
-                      <span> {this.statusIcon(value[1].status)}</span>
-                      <span> {value[1].status}</span>
-                    </Space>
-                  </Col>
-                  <Col span={6}>
-                    <Tag
-                      color={value[1].status === "Succeeded" ? "green" : value[1].status === "Failed" ? "red" : "blue"}
-                      icon={<TagOutlined />}
-                      key="Urgent"
-                      checked={true}>
-                      {value[1].status}
-                    </Tag>
-                    <Tag color={"default"} icon={<TagOutlined />} key="Hop" checked={true}>
-                      Hop Engine
-                    </Tag>
-                    <Tag color={"default"} icon={<TagOutlined />} key="Finance" checked={true}>
-                      Finance
-                    </Tag>
-                  </Col>
-                  <Col span={3}>
-                    <Space>
-                      <FieldTimeOutlined style={{ fontSize: "20px", color: "gray" }} />
+                <>
+                  <Row>
+                    <Col xs={24} sm={24} md={10} lg={7}>
                       <div>
-                        {value[1].details.history.status.completionTime
-                          ? "Completed in " +
-                            this.formatDuration(value[1].worload.metadata.creationTimestamp, value[1].details.history.status.completionTime, false)
-                          : "Started " + this.formatDuration(moment.now(), value[1].worload.metadata.creationTimestamp, false) + " ago"}
+                        <b>{value[0]}</b> (click for details)
                       </div>
-                    </Space>
-                  </Col>
-                  <Col span={6} align="right">
-                    <Space>
-                      <Button
-                        align="end"
-                        type="round"
-                        icon={<CodeOutlined size="small" />}
-                        size="small"
-                        disabled={!value[1].details}
-                        onClick={(event) => this.showSyntaxHighlighter(event, value[0], JSON.stringify(value[1].details, null, 2), "json", "40%")}>
-                        Debug
-                      </Button>
-                      <Button
-                        align="end"
-                        type="round"
-                        icon={<UnorderedListOutlined size="small" />}
-                        size="small"
-                        disabled={!value[1].details}
-                        onClick={(event) => this.showSpecs(event, value[0], value[1], "json", "40%")}>
-                        Specs
-                      </Button>
-                      <Button
-                        align="end"
-                        type="round"
-                        icon={<ExportOutlined size="small" />}
-                        size="small"
-                        disabled={!value[1].details.logs}
-                        onClick={(event) => this.showSyntaxHighlighter(event, value[0], value[1].details.logs, "clean", "40%")}>
-                        Logs
-                      </Button>
-                      <Button
-                        align="end"
-                        type="round"
-                        icon={<HistoryOutlined size="small" />}
-                        size="small"
-                        disabled={Object.keys(value[1].details.history.status).length === 0 || Object.keys(value[1].details.history.statusHistory).length === 0}
-                        onClick={(event) => this.showHistory(event, value[0], value[1].details, "json", "35%")}>
-                        History
-                      </Button>
-                      <Button
-                        danger
-                        align="end"
-                        type="round"
-                        icon={<PauseCircleOutlined size="small" />}
-                        size="small"
-                        disabled={value[1].details.history.status.completionTime}
-                        onClick={(event) => this.showConfirm(event, value[0], "Are you sure you want to remove and kill this workload ?", "")}>
-                        Kill
-                      </Button>
-                    </Space>
-                  </Col>
-                </Row>
+                      <div></div>
+                    </Col>
+                    <Col xs={24} sm={24} md={14} lg={8}>
+                      <Tag
+                        color={value[1].status === "Succeeded" ? "green" : value[1].status === "Failed" ? "red" : "blue"}
+                        icon={<TagOutlined />}
+                        key="Urgent"
+                        checked={true}>
+                        {value[1].status}
+                      </Tag>
+                      <Tag color={"default"} icon={<TagOutlined />} key="Hop" checked={true}>
+                        Hop Engine
+                      </Tag>
+                      <Tag color={"default"} icon={<TagOutlined />} key="Finance" checked={true}>
+                        Finance
+                      </Tag>
+                    </Col>
+                    <Col xs={24} sm={24} md={24} lg={3}>
+                      <Space>
+                        <span> {this.statusIcon(value[1].status)}</span>
+                        <span> {value[1].status}</span>
+                      </Space>
+                    </Col>
+                    <Col xs={24} sm={24} md={24} lg={4}>
+                      <Space>
+                        <FieldTimeOutlined style={{ fontSize: "20px", color: "gray" }} />
+                        <div>
+                          {value[1].details.history.status.completionTime && value[1].workload.metadata.creationTimestamp
+                            ? "Completed in " +
+                              this.formatDuration(value[1].workload.metadata.creationTimestamp, value[1].details.history.status.completionTime, false)
+                            : "Started " + this.formatDuration(moment.now(), value[1].workload.metadata.creationTimestamp, false) + " ago"}
+                        </div>
+                      </Space>
+                    </Col>
+                  </Row>
+                  <Row style={{ "marginTop": "10px" }}>
+                    <Col xs={24} sm={24} md={24} lg={24} align="right">
+                      <Space>
+                        <Button
+                          align="end"
+                          type="round"
+                          icon={<CodeOutlined size="small" />}
+                          size="small"
+                          disabled={!value[1].details}
+                          onClick={(event) => this.showSyntaxHighlighter(event, value[0], JSON.stringify(value[1].details, null, 2), "json", "800px")}>
+                          Debug
+                        </Button>
+                        <Button
+                          align="end"
+                          type="round"
+                          icon={<UnorderedListOutlined size="small" />}
+                          size="small"
+                          disabled={!value[1].details}
+                          onClick={(event) => this.showSpecs(event, value[0], value[1], "json", "800px")}>
+                          Specs
+                        </Button>
+                        <Button
+                          align="end"
+                          type="round"
+                          icon={<ExportOutlined size="small" />}
+                          size="small"
+                          disabled={!value[1].details.logs}
+                          onClick={(event) => this.showSyntaxHighlighter(event, value[0], value[1].details.logs, "clean", "800px")}>
+                          Logs
+                        </Button>
+                        <Button
+                          align="end"
+                          type="round"
+                          icon={<HistoryOutlined size="small" />}
+                          size="small"
+                          disabled={
+                            Object.keys(value[1].details.history.status).length === 0 || Object.keys(value[1].details.history.statusHistory).length === 0
+                          }
+                          onClick={(event) => this.showHistory(event, value[0], value[1].details, "json", "800px")}>
+                          History
+                        </Button>
+                        <Button
+                          danger
+                          align="end"
+                          type="round"
+                          icon={<PauseCircleOutlined size="small" />}
+                          size="small"
+                          disabled={value[1].details.history.status.completionTime}
+                          onClick={(event) => this.showConfirm(event, value[0], "Are you sure you want to remove and kill this workload ?", "")}>
+                          Kill
+                        </Button>
+                      </Space>
+                    </Col>
+                  </Row>
+                </>
               }
               key={value[0]}>
               <Row>
-                <Col span={10}>
+                <Col xs={24} sm={24} md={24} lg={10}>
                   {value[1].details.metrics ? (
                     <Row>
                       <Col span="24">
@@ -597,7 +603,7 @@ class ListWorkloads extends React.Component {
                     </Col>
                   )}
                 </Col>
-                <Col span={10}>
+                <Col xs={24} sm={24} md={24} lg={10}>
                   {value[1].details.metrics ? (
                     <Row>
                       <Col span="24">
@@ -644,7 +650,7 @@ class ListWorkloads extends React.Component {
                     </Col>
                   )}
                 </Col>
-                <Col span={4}>
+                <Col xs={24} sm={24} md={24} lg={4}>
                   <Divider orientation="left">Cost(s)</Divider>
                   <Statistic title="Cost(s)" valueStyle={{ color: "gray" }} value={"n.a."} suffix={"$"} prefix={<DollarOutlined />} />
                 </Col>

@@ -12,6 +12,7 @@ import {
   BellOutlined,
   QuestionCircleOutlined,
   PlusOutlined,
+  SyncOutlined,
   HomeOutlined,
   MailOutlined,
   PhoneOutlined,
@@ -19,13 +20,11 @@ import {
   SettingOutlined,
 } from "@ant-design/icons";
 
-import logo from './assets/rectio-logo.svg';
+import logo from "./assets/rectio-logo.svg";
 
 import { Link, Route } from "react-router-dom";
 
-import { Space, Layout, Menu, notification, Badge, Popover, Button, Divider, Image } from "antd";
-
-
+import { Space, Layout, Menu, notification, Badge, Popover, Button, Divider, Image, Modal } from "antd";
 
 const { Header, Content, Sider } = Layout;
 const { SubMenu } = Menu;
@@ -90,6 +89,16 @@ class App extends React.Component {
     this.setState({ state });
   }
 
+  syncWorkloads(event, name, message, extra) {
+    event.stopPropagation();
+    Modal.confirm({
+      title: "Showing " + name + " " + extra,
+      content: <span class="wkllogs">{message}</span>,
+      width: "30%",
+      onOk() {},
+    });
+  }
+
   showHelp(event) {
     event.stopPropagation();
     var state = { ...this.state };
@@ -147,13 +156,15 @@ class App extends React.Component {
         You can have different teams assigned with diferent resources and configurations, being also able to apply autoscalling (both vertical & horizontal) all
         based on Kubernetes stard offering.
         <br />
+        {/*
         <Divider orientation="left">License</Divider>
         <Button icon={<HomeOutlined />} type="link" target="_blank" href="https://www.apache.org/licenses/LICENSE-2.0">
           APACHE LICENSE, VERSION 2.0
         </Button>
+        */}
       </>
     );
-    state.drawerVisible.width = "30%";
+    state.drawerVisible.width = "600px";
     state.drawerVisible.visible = true;
     this.setState({ state });
   }
@@ -167,9 +178,9 @@ class App extends React.Component {
             <Content
               style={{
                 marginTop: "5px",
-                textAlign: "center"
+                textAlign: "center",
               }}>
-              <Image width={"46px"} src={logo} alt="RECTIO - Data Workloads on Kubernetes made easy!" preview={false}/>
+              <Image width={"46px"} src={logo} alt="RECTIO - Data Workloads on Kubernetes made easy!" preview={false} />
             </Content>
             <Menu theme="dark" defaultSelectedKeys={["1"]} mode="inline">
               <Menu.Item key="1" icon={<UnorderedListOutlined />}>
@@ -200,6 +211,11 @@ class App extends React.Component {
           <Layout className="site-layout">
             <Header align="right" className="site-layout-background">
               <Space>
+                <Button
+                  size="large"
+                  shape="circle"
+                  icon={<SyncOutlined style={{ fontSize: "16px", color: "gray" }} />}
+                  onClick={(event) => this.syncWorkloads(event,"Sync", "This will sunc workloads!", "")}></Button>
                 <Button
                   size="large"
                   type="primary"
