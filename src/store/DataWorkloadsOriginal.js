@@ -836,7 +836,65 @@ const DataWorkloads = {
         metadata: {},
         items: null,
       },
-      metrics: null,
+      metrics: [
+        {
+          metadata: {
+            name: "rectiowkl-m2vsf",
+            namespace: "default",
+            selfLink: "/apis/metrics.k8s.io/v1beta1/namespaces/default/pods/ssadadddddddd-m2vsf",
+            creationTimestamp: "2021-03-11T22:17:09Z",
+          },
+          timestamp: "2021-03-11T22:16:59Z",
+          window: "30s",
+          containers: [
+            {
+              name: "hop",
+              usage: {
+                cpu: "0",
+                memory: "3464Ki",
+              },
+            },
+          ],
+        },
+        {
+          metadata: {
+            name: "rectiowkl-m2vsf",
+            namespace: "default",
+            selfLink: "/apis/metrics.k8s.io/v1beta1/namespaces/default/pods/ssadadddddddd-m2vsf",
+            creationTimestamp: "2021-03-11T22:17:19Z",
+          },
+          timestamp: "2021-03-11T22:17:13Z",
+          window: "30s",
+          containers: [
+            {
+              name: "hop",
+              usage: {
+                cpu: "308106701n",
+                memory: "122168Ki",
+              },
+            },
+          ],
+        },
+        {
+          metadata: {
+            name: "rectiowkl-m2vsf",
+            namespace: "default",
+            selfLink: "/apis/metrics.k8s.io/v1beta1/namespaces/default/pods/ssadadddddddd-m2vsf",
+            creationTimestamp: "2021-03-11T22:17:29Z",
+          },
+          timestamp: "2021-03-11T22:17:13Z",
+          window: "30s",
+          containers: [
+            {
+              name: "hop",
+              usage: {
+                cpu: "308106701n",
+                memory: "122168Ki",
+              },
+            },
+          ],
+        },
+      ],
       logs: "2021/02/21 17:19:40 - HopRun - Enabling project 'workload' \n2021/02/21 17:19:42 - workload - Start of workflow execution \n2021/02/21 17:19:42 - workload - Starting action [Pipeline]",
       history: {
         status: {},
@@ -2444,7 +2502,65 @@ const DataWorkloads = {
         metadata: {},
         items: null,
       },
-      metrics: null,
+      metrics: [
+        {
+          metadata: {
+            name: "rectiowkl-m2vsf",
+            namespace: "default",
+            selfLink: "/apis/metrics.k8s.io/v1beta1/namespaces/default/pods/ssadadddddddd-m2vsf",
+            creationTimestamp: "2021-03-11T22:17:09Z",
+          },
+          timestamp: "2021-03-11T22:16:59Z",
+          window: "30s",
+          containers: [
+            {
+              name: "hop",
+              usage: {
+                cpu: "0",
+                memory: "3464Ki",
+              },
+            },
+          ],
+        },
+        {
+          metadata: {
+            name: "rectiowkl-m2vsf",
+            namespace: "default",
+            selfLink: "/apis/metrics.k8s.io/v1beta1/namespaces/default/pods/ssadadddddddd-m2vsf",
+            creationTimestamp: "2021-03-11T22:17:19Z",
+          },
+          timestamp: "2021-03-11T22:17:13Z",
+          window: "30s",
+          containers: [
+            {
+              name: "hop",
+              usage: {
+                cpu: "308106701n",
+                memory: "122168Ki",
+              },
+            },
+          ],
+        },
+        {
+          metadata: {
+            name: "rectiowkl-m2vsf",
+            namespace: "default",
+            selfLink: "/apis/metrics.k8s.io/v1beta1/namespaces/default/pods/ssadadddddddd-m2vsf",
+            creationTimestamp: "2021-03-11T22:17:29Z",
+          },
+          timestamp: "2021-03-11T22:17:13Z",
+          window: "30s",
+          containers: [
+            {
+              name: "hop",
+              usage: {
+                cpu: "308106701n",
+                memory: "122168Ki",
+              },
+            },
+          ],
+        },
+      ],
       logs: "",
       history: {
         status: {},
