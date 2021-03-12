@@ -14,12 +14,12 @@ const Stores = {
 }
 
 ReactDOM.render(
-  // <React.StrictMode>
+  <React.StrictMode>
     <BrowserRouter>
       <Provider Stores={Stores} DataWorkloads={Stores.DataWorkloadsStore}>
         <App />
       </Provider>
     </BrowserRouter>,
-  // </React.StrictMode>,
+  </React.StrictMode>,
   document.getElementById("root")
 );

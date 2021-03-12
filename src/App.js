@@ -1,7 +1,9 @@
 import "./App.css";
 import ListWorkloads from "./components/ListWorkloads";
+import DataWorkloadsStore from "./store/DataWorkloadsStore";
 import RectioDrawer, { AddWorkloadForm } from "./components/RectioDrawer";
 import React from "react";
+import { observer, inject } from "mobx-react";
 import Resources, { Metrics, Team, Settings } from "./utils/Utils";
 import {
   RadarChartOutlined,
@@ -24,7 +26,7 @@ import logo from "./assets/rectio-logo.svg";
 
 import { Link, Route } from "react-router-dom";
 
-import { Space, Layout, Menu, notification, Badge, Popover, Button, Divider, Image, Modal } from "antd";
+import { Space, Layout, Menu, notification, Badge, Popover, Button, Divider, Image } from "antd";
 
 const { Header, Content, Sider } = Layout;
 const { SubMenu } = Menu;
@@ -73,30 +75,32 @@ class App extends React.Component {
   };
 
   closeRectioDrawer(event) {
-    event.stopPropagation();
+    if (event) {
+      event.stopPropagation();
+    } else {
+      const dws = DataWorkloadsStore;
+      dws.fetchWorkloads()
+    }
     var state = { ...this.state };
     state.drawerVisible.visible = false;
     this.setState({ state });
+
   }
 
   openRectioDrawerAddWorkload(event) {
     event.stopPropagation();
     var state = { ...this.state };
     state.drawerVisible.title = "Add a new data workload";
-    state.drawerVisible.content = this.addWorkload.addWorkloadDom();
+    state.drawerVisible.content = this.addWorkload.addWorkloadDom(this);
     state.drawerVisible.width = "700px";
     state.drawerVisible.visible = true;
     this.setState({ state });
   }
 
-  syncWorkloads(event, name, message, extra) {
+  syncWorkloads(event) {
     event.stopPropagation();
-    Modal.confirm({
-      title: "Showing " + name + " " + extra,
-      content: <span class="wkllogs">{message}</span>,
-      width: "30%",
-      onOk() {},
-    });
+    const dws = DataWorkloadsStore;
+    dws.fetchWorkloads();
   }
 
   showHelp(event) {
@@ -169,8 +173,19 @@ class App extends React.Component {
     this.setState({ state });
   }
 
+  componentDidMount() {
+    const dws = DataWorkloadsStore;
+    dws.fetchWorkloads()
+    setInterval(() => {dws.fetchWorkloads();}, 15000); // runs every 15 seconds.
+  }
+
+  componentWillUnmount() {
+    this.intervalID = clearTimeout(this.intervalID);
+  }
+
   render() {
     const { collapsed } = this.state;
+    // const wkls = this.props.DataWorkloads;
     return (
       <>
         <Layout style={{ minHeight: "100vh" }}>
@@ -215,7 +230,7 @@ class App extends React.Component {
                   size="large"
                   shape="circle"
                   icon={<SyncOutlined style={{ fontSize: "16px", color: "gray" }} />}
-                  onClick={(event) => this.syncWorkloads(event,"Sync", "This will sunc workloads!", "")}></Button>
+                  onClick={(event) => this.syncWorkloads(event)}></Button>
                 <Button
                   size="large"
                   type="primary"
@@ -282,4 +297,4 @@ class App extends React.Component {
   }
 }
 
-export default App;
+export default inject("DataWorkloads")(observer(App));

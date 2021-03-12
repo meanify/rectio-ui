@@ -1,5 +1,5 @@
 import { makeObservable, observable, action, computed } from "mobx";
-import DataWorkloads from "./DataWorkloadsOriginal";
+import DataWorkloads from "./DataWorkloads";
 import * as mobx from "mobx";
 import _ from "lodash";
 import Numbro from "numbro";
@@ -21,6 +21,7 @@ class DataWorkloadsStore {
 
     makeObservable(this, {
       dataWorkloads: observable,
+      isFetching: observable,
       fetchWorkloads: action,
       fetchWorkload: action,
       getWorkloads: action,
@@ -34,10 +35,10 @@ class DataWorkloadsStore {
   }
 
   processResponse(response) {
-    console.log(response);
+    // console.log(response);
     const message = response?.data;
     if (message !== "undefined") {
-      console.log(message);
+      // console.log(message);
       this.dataWorkloads = observable.map(message, { deep: true });
     }
   }
@@ -51,25 +52,16 @@ class DataWorkloadsStore {
 
   fetchWorkload(wklname) {
     api.get("workload").then((response) => {
-      console.log(response);
+      // console.log(response);
       const message = response?.data;
       if (message !== "undefined") {
-        console.log(message);
+        // console.log(message);
         this.dataWorkloads = observable.map(message, { deep: true });
       }
     });
   }
 
   getWorkloads() {
-    /*
-    api.get("workload").then((response) => {
-      console.log(response);
-      const message = response?.data
-      if (message !== "undefined") {
-        console.log(message);
-        this.dataWorkloads = observable.map(message, { deep: true });
-      }
-    })*/
     return mobx.toJS(this.dataWorkloads);
   }
 
@@ -93,7 +85,6 @@ class DataWorkloadsStore {
     return this.dataWorkloads.size;
   }
 
-
   get activeResources() {
     const numbroFormat = {
       trimMantissa: true,
@@ -106,7 +97,7 @@ class DataWorkloadsStore {
       mantissa: 1,
       spaceSeparated: true,
     };
-    let active = [...this.getWorkloads().entries()].filter((value) => {
+    let active = [...mobx.toJS(this.dataWorkloads).entries()].filter((value) => {
       return value[1].status === "Active";
     });
     let metricsCollection = active.map((value) => {
@@ -119,19 +110,19 @@ class DataWorkloadsStore {
   }
 
   get active() {
-    return [...this.getWorkloads().entries()].filter((value) => {
+    return [...mobx.toJS(this.dataWorkloads).entries()].filter((value) => {
       return value[1].status === "Active";
     }).length;
   }
 
   get successed() {
-    return [...this.getWorkloads().entries()].filter((value) => {
+    return [...mobx.toJS(this.dataWorkloads).entries()].filter((value) => {
       return value[1].status === "Succeeded";
     }).length;
   }
 
   get failed() {
-    return [...this.getWorkloads().entries()].filter((value) => {
+    return [...mobx.toJS(this.dataWorkloads).entries()].filter((value) => {
       return value[1].status === "Failed";
     }).length;
   }

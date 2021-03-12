@@ -433,7 +433,7 @@ class ListWorkloads extends React.Component {
               <Statistic title="Total" value={wkls.total} suffix={"Workloads"} />
             </Col>
             <Col xs={12} sm={12} md={6} lg={3}>
-              <Statistic title="Active" valueStyle={{ color: "gray" }} value={wkls.active} suffix={"/" + wkls.total} prefix={<SyncOutlined spin />} />
+              <Statistic title="Active" valueStyle={{ color: "gray" }} value={wkls.active} suffix={"/" + wkls.total} prefix={wkls.active>0? <SyncOutlined spin />:<SyncOutlined />} />
             </Col>
             <Col xs={12} sm={12} md={6} lg={3}>
               <Statistic title="Successed" valueStyle={{ color: "green" }} value={wkls.successed} suffix={"/" + wkls.total} prefix={<CheckCircleOutlined />} />

@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Drawer, Button, Form, Input, Space, Collapse, Select, Radio } from "antd";
+import { Drawer, Button, Form, Input, Space, Collapse, Select, Radio, notification } from "antd";
 import _ from "lodash";
 
 import { PlusOutlined, MinusCircleOutlined } from "@ant-design/icons";
@@ -44,7 +44,7 @@ class AddWorkloadForm {
     metadata: {
       name: "",
       labels: {
-        name: "rectiowkl",
+        controller: "rectio",
         engine: "hop",
       },
       annotations: {
@@ -56,7 +56,6 @@ class AddWorkloadForm {
       tags: ["Demo", "Workloads", "k8s", "Apache Hop"],
     },
     spec: {
-      name: "rectiowkl",
       workload: "/opt/hop/slimhop/artifacts/workload.hwf",
       loglevel: "BASIC",
       parameters: [],
@@ -87,26 +86,39 @@ class AddWorkloadForm {
     }
   }
 
-  onFinish(values, initialValues) {
+  onFinish(values, initialValues, origin) {
     const compiled = _.merge({}, initialValues, values);
-    console.log("Default values:", initialValues);
-    console.log("Received values of form:", values);
-    console.log("Final request for server:", compiled);
+    // console.log("Default values:", initialValues);
+    // console.log("Received values of form:", values);
+    // console.log("Final request for server:", compiled);
     api
       .post("workload", compiled)
       .then((response) => {
-        console.log(response);
-        const message = response?.data
+        const message = response?.data;
         if (message !== "undefined") {
-          console.log(message);
+          notification.success({
+            message: "Success",
+            duration: 1,
+            description: "Workload " + message.metadata.name + " created successfully!",
+            placement: "topRight",
+          });
+          // console.data(message);
         }
+        origin.closeRectioDrawer(null);
       })
       .catch((error) => {
-        const message = error?.response?.data?.message
+        const message = error?.response?.data?.message;
         if (message !== "undefined") {
-          console.log(message);
+          notification.error({
+            message: "Error",
+            duration: 3,
+            description: message,
+            placement: "topRight",
+          });
+          //console.log(message);
         }
       });
+    
   }
 
   handleChange(value) {
@@ -117,10 +129,14 @@ class AddWorkloadForm {
     return number;
   }
 
-  addWorkloadDom() {
+  addWorkloadDom(origin) {
     return (
       <>
-        <Form layout="horizontal" onFinish={(values) => this.onFinish(values, this.initialValues)} initialValues={this.initialValues} {...this.formItemLayout}>
+        <Form
+          layout="horizontal"
+          onFinish={(values) => this.onFinish(values, this.initialValues, origin)}
+          initialValues={this.initialValues}
+          {...this.formItemLayout}>
           {/* Workload name   */}
           <Form.Item name={["metadata", "name"]} label={"Workload"} rules={[{ required: true, message: "Missing the workload name!" }]}>
             <Input placeholder="The name of the workload" />
