@@ -44,6 +44,7 @@ class DataWorkloadsStore {
   }
 
   fetchWorkloads() {
+    console.info("Fetching updates on workloads")
     let that = this;
     api.get("workload").then((response) => {
       that.processResponse(response);
@@ -51,6 +52,7 @@ class DataWorkloadsStore {
   }
 
   fetchWorkload(wklname) {
+    console.info("Fetching updates on workloads")
     api.get("workload").then((response) => {
       // console.log(response);
       const message = response?.data;

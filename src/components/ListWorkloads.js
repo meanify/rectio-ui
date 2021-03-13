@@ -203,9 +203,10 @@ class ListWorkloads extends React.Component {
 
   showLogs(event, name, logs, extra) {
     event.stopPropagation();
+    const count = logs.length;
     Modal.info({
       title: "Showing " + name + " " + extra,
-      content: <span class="wkllogs">{logs}</span>,
+      content: <span class="wkllogs">{count}</span>,
       width: "75%",
       onOk() {},
     });
@@ -221,28 +222,55 @@ class ListWorkloads extends React.Component {
     });
   }
 
+  downloadLogs(event, title, content) {
+    event.stopPropagation();
+    const element = document.createElement("a");
+    const file = new Blob([content], { type: "text/plain" });
+    element.href = URL.createObjectURL(file);
+    element.download = title + "_logs.txt";
+    document.body.appendChild(element); // Required for this to work in FireFox
+    element.click();
+    document.body.removeChild(element); // Required for this to work in FireFox
+  }
+
   showSyntaxHighlighter(event, title, content, language, width) {
     event.stopPropagation();
-    this.setState({
-      drawerVisible: {
-        visible: true,
-        title: title,
-        content: (
-          <SyntaxHighlighter
-            language={language}
-            style={a11yLight}
-            lineProps={{
-              style: { wordBreak: "break-all", whiteSpace: "pre-wrap" },
-            }}
-            wrapLines={true}
-            showLineNumbers={false}>
-            {content}
-          </SyntaxHighlighter>
-        ),
-        language: language,
-        width: width,
-      },
-    });
+    if (language === "clean") { 
+      this.setState({
+        drawerVisible: {
+          visible: true,
+          title: title,
+          content: (
+            <Space>
+              <div style={{ whiteSpace: "pre-wrap" }}>{content}</div>
+            </Space>
+          ),
+          language: language,
+          width: width,
+        },
+      });
+    } else {
+      this.setState({
+        drawerVisible: {
+          visible: true,
+          title: title,
+          content: (
+            <SyntaxHighlighter
+              language={language}
+              style={a11yLight}
+              lineProps={{
+                style: { wordBreak: "break-all", whiteSpace: "pre-wrap" },
+              }}
+              wrapLines={true}
+              showLineNumbers={false}>
+              {content}
+            </SyntaxHighlighter>
+          ),
+          language: language,
+          width: width,
+        },
+      });
+    }
   }
 
   showSpecs(event, title, content, language, width) {
@@ -423,6 +451,17 @@ class ListWorkloads extends React.Component {
     });
   }
 
+  showTags(tags) {
+    var elems = tags.map((text, index) => {
+      return (
+        <Tag key={text} color={"default"} icon={<TagOutlined />} checked={true}>
+          {text}
+        </Tag>
+      );
+    });
+    return elems;
+  }
+
   render() {
     const wkls = this.props.DataWorkloads;
     return (
@@ -433,7 +472,13 @@ class ListWorkloads extends React.Component {
               <Statistic title="Total" value={wkls.total} suffix={"Workloads"} />
             </Col>
             <Col xs={12} sm={12} md={6} lg={3}>
-              <Statistic title="Active" valueStyle={{ color: "gray" }} value={wkls.active} suffix={"/" + wkls.total} prefix={wkls.active>0? <SyncOutlined spin />:<SyncOutlined />} />
+              <Statistic
+                title="Active"
+                valueStyle={{ color: "gray" }}
+                value={wkls.active}
+                suffix={"/" + wkls.total}
+                prefix={wkls.active > 0 ? <SyncOutlined spin /> : <SyncOutlined />}
+              />
             </Col>
             <Col xs={12} sm={12} md={6} lg={3}>
               <Statistic title="Successed" valueStyle={{ color: "green" }} value={wkls.successed} suffix={"/" + wkls.total} prefix={<CheckCircleOutlined />} />
@@ -445,7 +490,12 @@ class ListWorkloads extends React.Component {
               <Statistic title="CPU utilization" value={wkls.activeResources.cpu} suffix="core(s)" prefix={<FiCpu />} />
             </Col>
             <Col xs={12} sm={12} md={6} lg={4}>
-              <Statistic title="Memory utilization" value={wkls.activeResources.memory.split(" ")[0]} suffix={wkls.activeResources.memory.split(" ")[1]} prefix={<BiMemoryCard />} />
+              <Statistic
+                title="Memory utilization"
+                value={wkls.activeResources.memory.split(" ")[0]}
+                suffix={wkls.activeResources.memory.split(" ")[1]}
+                prefix={<BiMemoryCard />}
+              />
             </Col>
             <Col xs={12} sm={12} md={6} lg={4}>
               <Statistic title="Active Workloads" value={wkls.active} prefix={<Badge status="processing" size="large" />} />
@@ -466,19 +516,7 @@ class ListWorkloads extends React.Component {
                       <div></div>
                     </Col>
                     <Col xs={24} sm={24} md={14} lg={8}>
-                      <Tag
-                        color={value[1].status === "Succeeded" ? "green" : value[1].status === "Failed" ? "red" : "blue"}
-                        icon={<TagOutlined />}
-                        key="Urgent"
-                        checked={true}>
-                        {value[1].status}
-                      </Tag>
-                      <Tag color={"default"} icon={<TagOutlined />} key="Hop" checked={true}>
-                        Hop Engine
-                      </Tag>
-                      <Tag color={"default"} icon={<TagOutlined />} key="Finance" checked={true}>
-                        Finance
-                      </Tag>
+                      {value[1].workload.context.tags ? this.showTags(value[1].workload.context.tags) : ""}
                     </Col>
                     <Col xs={24} sm={24} md={24} lg={3}>
                       <Space>
@@ -498,10 +536,11 @@ class ListWorkloads extends React.Component {
                       </Space>
                     </Col>
                   </Row>
-                  <Row style={{ "marginTop": "10px" }}>
+                  <Row style={{ marginTop: "10px" }}>
                     <Col xs={24} sm={24} md={24} lg={24} align="right">
                       <Space>
                         <Button
+                          key="debug"
                           align="end"
                           type="round"
                           icon={<CodeOutlined size="small" />}
@@ -511,6 +550,7 @@ class ListWorkloads extends React.Component {
                           Debug
                         </Button>
                         <Button
+                          key="specs"
                           align="end"
                           type="round"
                           icon={<UnorderedListOutlined size="small" />}
@@ -520,6 +560,7 @@ class ListWorkloads extends React.Component {
                           Specs
                         </Button>
                         <Button
+                          key="logs"
                           align="end"
                           type="round"
                           icon={<ExportOutlined size="small" />}
@@ -529,6 +570,7 @@ class ListWorkloads extends React.Component {
                           Logs
                         </Button>
                         <Button
+                          key="history"
                           align="end"
                           type="round"
                           icon={<HistoryOutlined size="small" />}
@@ -569,7 +611,7 @@ class ListWorkloads extends React.Component {
                               <Statistic
                                 title="Minimum"
                                 valueStyle={{ color: "gray" }}
-                                value={Numbro(cpu.max).format(this.numbroFormat)}
+                                value={Numbro(cpu.min).format(this.numbroFormat)}
                                 suffix={"core(s)"}
                                 prefix={<FiCpu />}
                               />
@@ -614,6 +656,7 @@ class ListWorkloads extends React.Component {
                           <>
                             <Col span="8">
                               <Statistic
+                                key=""
                                 title="Minimum"
                                 valueStyle={{ color: "gray" }}
                                 value={Numbro(memory.min).format(this.numbroFormatByte).split(" ")[0]}
@@ -652,7 +695,7 @@ class ListWorkloads extends React.Component {
                 </Col>
                 <Col xs={24} sm={24} md={24} lg={4}>
                   <Divider orientation="left">Cost(s)</Divider>
-                  <Statistic title="Cost(s)" valueStyle={{ color: "gray" }} value={"n.a."} suffix={"$"} prefix={<DollarOutlined />} />
+                  <Statistic title="Cost(s)" valueStyle={{ color: "gray" }} value={"-"} suffix={"$"} prefix={<DollarOutlined />} />
                 </Col>
               </Row>
             </Collapse.Panel>

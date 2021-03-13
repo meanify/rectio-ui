@@ -53,7 +53,7 @@ class AddWorkloadForm {
     },
     context: {
       dimensions: [],
-      tags: ["Demo", "Workloads", "k8s", "Apache Hop"],
+      tags: ["Workloads", "Finance"],
     },
     spec: {
       workload: "/opt/hop/slimhop/artifacts/workload.hwf",
@@ -91,6 +91,7 @@ class AddWorkloadForm {
     // console.log("Default values:", initialValues);
     // console.log("Received values of form:", values);
     // console.log("Final request for server:", compiled);
+    console.log("Final request for server:", compiled);
     api
       .post("workload", compiled)
       .then((response) => {
@@ -118,7 +119,6 @@ class AddWorkloadForm {
           //console.log(message);
         }
       });
-    
   }
 
   handleChange(value) {
@@ -257,6 +257,29 @@ class AddWorkloadForm {
                     <Option value="ROWLEVEL">Row Level</Option>
                   </Select>
                 </Form.Item>
+                {/* CPU Requets */}
+                <Form.Item name={["spec", "resources", "requests", "cpu"]} label="CPU Limits" {...this.formItemLayout}>
+                  <Radio.Group defaultValue="a" size="small">
+                    <Radio.Button value="250m">250m</Radio.Button>
+                    <Radio.Button value="500m">500m</Radio.Button>
+                    <Radio.Button value="1">1CPU</Radio.Button>
+                    <Radio.Button value="2">2CPUs</Radio.Button>
+                    <Radio.Button value="4">4CPUs</Radio.Button>
+                    <Radio.Button value="8">8CPUs</Radio.Button>
+                  </Radio.Group>
+                </Form.Item>
+                {/* Memory Requests */}
+                <Form.Item name={["spec", "resources", "requests", "memory"]} label="Memory Requests" {...this.formItemLayout}>
+                  <Radio.Group defaultValue="a" size="small">
+                    <Radio.Button value="250Mi">250Mi</Radio.Button>
+                    <Radio.Button value="500Mi">500Mi</Radio.Button>
+                    <Radio.Button value="1Gi">1Gi</Radio.Button>
+                    <Radio.Button value="2Gi">2Gi</Radio.Button>
+                    <Radio.Button value="4Gi">4Gi</Radio.Button>
+                    <Radio.Button value="8Gi">8Gi</Radio.Button>
+                  </Radio.Group>
+                </Form.Item>
+                {/* CPU Limits */}
                 <Form.Item name={["spec", "resources", "limits", "cpu"]} label="CPU Limits" {...this.formItemLayout}>
                   <Radio.Group defaultValue="a" size="small">
                     <Radio.Button value="250m">250m</Radio.Button>
@@ -270,12 +293,24 @@ class AddWorkloadForm {
                 {/* Memory Limits */}
                 <Form.Item name={["spec", "resources", "limits", "memory"]} label="Memory Limits" {...this.formItemLayout}>
                   <Radio.Group defaultValue="a" size="small">
-                    <Radio.Button value="250Mi">250Mi</Radio.Button>
-                    <Radio.Button value="500Mi">500Mi</Radio.Button>
-                    <Radio.Button value="1Gi">1Gi</Radio.Button>
-                    <Radio.Button value="2Gi">2Gi</Radio.Button>
-                    <Radio.Button value="4Gi">4Gi</Radio.Button>
-                    <Radio.Button value="8Gi">8Gi</Radio.Button>
+                    <Radio.Button key="250Mi" value="250Mi">
+                      250Mi
+                    </Radio.Button>
+                    <Radio.Button key="500Mi" value="500Mi">
+                      500Mi
+                    </Radio.Button>
+                    <Radio.Button key="1Gi" value="1Gi">
+                      1Gi
+                    </Radio.Button>
+                    <Radio.Button key="2Gi" value="2Gi">
+                      2Gi
+                    </Radio.Button>
+                    <Radio.Button key="4Gi" value="4Gi">
+                      4Gi
+                    </Radio.Button>
+                    <Radio.Button key="8Gi" value="8Gi">
+                      8Gi
+                    </Radio.Button>
                   </Radio.Group>
                 </Form.Item>
               </Panel>

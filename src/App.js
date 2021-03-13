@@ -174,9 +174,11 @@ class App extends React.Component {
   }
 
   componentDidMount() {
+    // const REFRESH_INTERVAL = 15000;
+    const REFRESH_INTERVAL = 15000;
     const dws = DataWorkloadsStore;
     dws.fetchWorkloads()
-    setInterval(() => {dws.fetchWorkloads();}, 15000); // runs every 15 seconds.
+    setInterval(() => {dws.fetchWorkloads();}, REFRESH_INTERVAL); // runs every 15 seconds.
   }
 
   componentWillUnmount() {
